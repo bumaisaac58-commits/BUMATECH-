@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#2563eb">
+  <title>MwalimuEase | School Setup Wizard</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <div class="brand">
+        <div class="brand-mark">ME</div>
+        <div>
+          <strong>MwalimuEase</strong>
+          <small>School Management System</small>
+        </div>
+      </div>
+      <button id="logoutBtn" class="ghost-btn">Logout</button>
+    </header>
+
+    <main class="wizard-wrap">
+      <section class="hero">
+        <div>
+          <span class="eyebrow">INITIAL SCHOOL SETUP</span>
+          <h1>Let's set up your school</h1>
+          <p>Complete these simple steps. Your information is saved to Supabase as you progress.</p>
+        </div>
+        <div class="progress-card">
+          <div class="progress-top"><span id="progressLabel">Step 1 of 7</span><b id="progressPercent">14%</b></div>
+          <div class="progress-track"><div id="progressBar"></div></div>
+        </div>
+      </section>
+
+      <nav class="steps" id="stepsNav" aria-label="Setup steps">
+        <button data-step="1" class="step active"><span>1</span><b>School</b></button>
+        <button data-step="2" class="step"><span>2</span><b>Structure</b></button>
+        <button data-step="3" class="step"><span>3</span><b>Subjects</b></button>
+        <button data-step="4" class="step"><span>4</span><b>Staff</b></button>
+        <button data-step="5" class="step"><span>5</span><b>Academics</b></button>
+        <button data-step="6" class="step"><span>6</span><b>Administration</b></button>
+        <button data-step="7" class="step"><span>7</span><b>Finish</b></button>
+      </nav>
+
+      <div id="message" class="message hidden"></div>
+
+      <form id="wizardForm" novalidate>
+        <section class="wizard-card" data-panel="1">
+          <div class="card-heading"><span class="icon">🏫</span><div><h2>School details</h2><p>Tell us about your school.</p></div></div>
+          <div class="grid">
+            <label>School name *<input id="schoolName" required placeholder="e.g. MwalimuEase Academy"></label>
+            <label>School code *<input id="schoolCode" required maxlength="30" placeholder="e.g. ME001"></label>
+            <label>KNEC code<input id="knecCode" maxlength="30" placeholder="Optional"></label>
+            <label>School type<select id="schoolType"><option>Primary</option><option>Junior Secondary</option><option>Primary & Junior Secondary</option></select></label>
+            <label>County<input id="county" value="Trans Nzoia" placeholder="County"></label>
+            <label>Sub-county<input id="subCounty" placeholder="Sub-county"></label>
+            <label>School category<select id="category"><option>Public</option><option>Private</option><option>Community</option><option>Other</option></select></label>
+            <label>Day / Boarding<select id="attendanceType"><option>Day</option><option>Boarding</option><option>Day & Boarding</option></select></label>
+            <label class="full">School motto<input id="motto" placeholder="e.g. Excellence via Faith"></label>
+          </div>
+          <div class="upload-row">
+            <div id="logoPreview" class="logo-preview">🏫</div>
+            <div><b>School logo</b><p>Optional PNG/JPG. Stored in Supabase Storage.</p><input id="logoFile" type="file" accept="image/png,image/jpeg"></div>
+          </div>
+        </section>
+
+        <section class="wizard-card hidden" data-panel="2">
+          <div class="card-heading"><span class="icon">🏗️</span><div><h2>School structure</h2><p>Select the classes your school offers.</p></div></div>
+          <div class="option-grid" id="gradeOptions">
+            <label class="check-card"><input type="checkbox" value="PP1"> <span>PP1</span></label>
+            <label class="check-card"><input type="checkbox" value="PP2"> <span>PP2</span></label>
+            <label class="check-card"><input type="checkbox" value="Grade 1"> <span>Grade 1</span></label>
+            <label class="check-card"><input type="checkbox" value="Grade 2"> <span>Grade 2</span></label>
+            <label class="check-card"><input type="checkbox" value="Grade 3"> <span>Grade 3</span></label>
+            <label class="check-card"><input type="checkbox" value="Grade 4"> <span>Grade 4</span></label>
+            <label class="check-card"><input type="checkbox" value="Grade 5"> <span>Grade 5</span></label>
+            <label class="check-card"><input type="checkbox" value="Grade 6"> <span>Grade 6</span></label>
+            <label class="check-card"><input type="checkbox" value="Grade 7"> <span>Grade 7</span></label>
+            <label class="check-card"><input type="checkbox" value="Grade 8"> <span>Grade 8</span></label>
+            <label class="check-card"><input type="checkbox" value="Grade 9"> <span>Grade 9</span></label>
+          </div>
+          <div class="grid compact">
+            <label>Academic year<input id="academicYear" type="number" value="2026"></label>
+            <label>Number of streams<input id="streamCount" type="number" min="1" max="20" value="1"></label>
+          </div>
+          <div class="mini-note">You can add or remove classes and streams later from School Structure.</div>
+        </section>
+
+        <section class="wizard-card hidden" data-panel="3">
+          <div class="card-heading"><span class="icon">📚</span><div><h2>Subjects</h2><p>Choose the subjects used by your school.</p></div></div>
+          <div class="subject-toolbar">
+            <input id="subjectSearch" placeholder="Search subjects...">
+            <button type="button" id="selectAllSubjects" class="secondary-btn">Select all</button>
+          </div>
+          <div class="subject-grid" id="subjectOptions"></div>
+        </section>
+
+        <section class="wizard-card hidden" data-panel="4">
+          <div class="card-heading"><span class="icon">👩🏽‍🏫</span><div><h2>Staff setup</h2><p>Create the first school administrator profile. More staff can be added later.</p></div></div>
+          <div class="grid">
+            <label>Administrator name *<input id="adminName" required placeholder="Full name"></label>
+            <label>Role<select id="adminRole"><option>Headteacher</option><option>Deputy Headteacher</option><option>School Administrator</option></select></label>
+            <label>Phone<input id="adminPhone" placeholder="+254..."></label>
+            <label>Email<input id="adminEmail" type="email" placeholder="Uses your logged-in email by default"></label>
+          </div>
+          <div class="mini-note">The logged-in Supabase account is automatically linked to this school as its owner/admin.</div>
+        </section>
+
+        <section class="wizard-card hidden" data-panel="5">
+          <div class="card-heading"><span class="icon">📊</span><div><h2>Academic setup</h2><p>Set the basic assessment and timetable preferences.</p></div></div>
+          <div class="grid">
+            <label>Assessment system<select id="assessmentSystem"><option>CBC / CBE</option><option>8-4-4</option><option>Custom</option></select></label>
+            <label>Grading scale<select id="gradingScale"><option>Kenya CBC</option><option>A-E</option><option>Percentage</option><option>Custom</option></select></label>
+            <label>Terms per year<input id="termsPerYear" type="number" min="1" max="4" value="3"></label>
+            <label>Lessons per day<input id="lessonsPerDay" type="number" min="1" max="20" value="13"></label>
+            <label>School starts<input id="startTime" type="time" value="07:30"></label>
+            <label>School closes<input id="endTime" type="time" value="16:30"></label>
+          </div>
+          <div class="toggle-row"><span><b>Enable timetable module</b><small>Generate class timetables later.</small></span><input id="enableTimetable" type="checkbox" checked></div>
+          <div class="toggle-row"><span><b>Enable bulk SMS module</b><small>Connect an SMS provider later.</small></span><input id="enableSms" type="checkbox"></div>
+        </section>
+
+        <section class="wizard-card hidden" data-panel="6">
+          <div class="card-heading"><span class="icon">⚙️</span><div><h2>Administration</h2><p>Set the basic school administration preferences.</p></div></div>
+          <div class="grid">
+            <label>Currency<select id="currency"><option value="KES">Kenya Shilling (KES)</option><option value="USD">US Dollar (USD)</option></select></label>
+            <label>Fees collection<select id="feesMode"><option>Enabled</option><option>Disabled</option></select></label>
+            <label>Parent portal<select id="parentPortal"><option>Enabled</option><option>Disabled</option></select></label>
+            <label>Boarding management<select id="boardingMode"><option>Enabled</option><option>Disabled</option></select></label>
+          </div>
+          <div class="mini-note">These preferences can be changed later. No payment is processed by this setup wizard.</div>
+        </section>
+
+        <section class="wizard-card hidden" data-panel="7">
+          <div class="card-heading"><span class="icon">🎉</span><div><h2>Review & finish</h2><p>Check the setup summary, then create your school.</p></div></div>
+          <div id="review" class="review"></div>
+          <div class="security-note">🔒 Your school data is protected by Supabase Row Level Security. Each school sees only its own records.</div>
+        </section>
+
+        <div class="wizard-actions">
+          <button type="button" id="backBtn" class="secondary-btn" disabled>← Back</button>
+          <div class="actions-right">
+            <button type="button" id="saveBtn" class="secondary-btn">Save progress</button>
+            <button type="button" id="nextBtn" class="primary-btn">Continue →</button>
+          </div>
+        </div>
+      </form>
+    </main>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="app.js"></script>
+</body>
+</html>
