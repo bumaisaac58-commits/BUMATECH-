@@ -3,147 +3,50 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>/title>BUMATECH Login</title>
+  <title>MwalimuEase Dashboard</title>
   <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-<div class="login-page">
+  <h1>MwalimuEase</h1>
+  <p>School Management Dashboard</p>
 
-  <div class="login-card">
+  <hr>
 
-    <div class="login-logo">
-          BTEC
-    </div>
+  <h2>Dashboard</h2>
 
-    <h1>Welcome to BUMATECH </h1>
+  <button onclick="location.href='index.html'">
+    🏠 Home
+  </button>
 
-    <p class="login-subtitle">
-      School Management System
-    </p>
+  <button onclick="alert('Teachers module coming next')">
+    👨‍🏫 Teachers
+  </button>
 
-    <div id="message" class="message hidden"></div>
+  <button onclick="alert('Students module coming next')">
+    👨‍🎓 Students
+  </button>
 
-    <form id="loginForm">
+  <button onclick="alert('Marks module coming next')">
+    📝 Marks
+  </button>
 
-      <label>
-        Email address
-        <input
-          type="email"
-          id="email"
-          placeholder="admin@example.com"
-          required>
-      </label>
+  <button onclick="alert('Subjects module coming next')">
+    📚 Subjects
+  </button>
 
-      <label>
-        Password
-        <input
-          type="password"
-          id="password"
-          placeholder="Enter password"
-          required>
-      </label>
+  <button onclick="alert('Timetable module coming next')">
+    📅 Timetable
+  </button>
 
-      <button type="submit" class="primary-btn">
-        Login
-      </button>
+  <button onclick="alert('SMS module coming next')">
+    💬 SMS
+  </button>
 
-    </form>
-
-    <p class="register-text">
-      New school?
-      <a href="#" id="signupLink">Create administrator account</a>
-    </p>
-
-  </div>
-
-</div>
-
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-<script>
-const SUPABASE_URL =https://kgibditegnkghtvcmilc.supabase.co/rest/v1/ "YOUR_SUPABASE_PROJECT_URL";
-const SUPABASE_ANON_KEY = "YOUR_SUPABASE_ANON_KEY";eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtnaWJkaXRlZ25rZ2h0dmNtaWxjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTA4NTkyMDUsImV4cCI6MjEwNjQzNTIwNX0.XE5j1guWFYnz6SwftIPFAh7lkFUVa8D5dXKkeuuNkPs
-
-const db = supabase.createClient(
-  SUPABASE_URL,
-  SUPABASE_ANON_KEY
-);
-
-const form = document.getElementById("loginForm");
-const message = document.getElementById("message");
-
-function showMessage(text, type = "") {
-  message.textContent = text;
-  message.className = "message " + type;
-}
-
-form.addEventListener("submit", async function(e) {
-
-  e.preventDefault();
-
-  showMessage("Signing in...");
-
-  const email =
-    document.getElementById("email").value.trim();
-
-  const password =
-    document.getElementById("password").value;
-
-  const { data, error } =
-    await db.auth.signInWithPassword({
-      email,
-      password
-    });
-
-  if (error) {
-    showMessage(error.message, "error");
-    return;
-  }
-
-  showMessage("Login successful!", "success");
-
-  setTimeout(() => {
-    window.location.href = "setup-wizard.html";
-  }, 700);
-
-});
-
-document.getElementById("signupLink").onclick =
-async function(e) {
-
-  e.preventDefault();
-
-  const email = prompt(
-    "Enter administrator email:"
-  );
-
-  if (!email) return;
-
-  const password = prompt(
-    "Create a password (minimum 6 characters):"
-  );
-
-  if (!password) return;
-
-  const { error } =
-    await db.auth.signUp({
-      email,
-      password
-    });
-
-  if (error) {
-    showMessage(error.message, "error");
-    return;
-  }
-
-  showMessage(
-    "Account created. Check your email if confirmation is required.",
-    "success"
-  );
-};
-</script>
+  <button onclick="alert('School Setup coming next')">
+    ⚙️ School Setup
+  </button>
 
 </body>
 </html>
