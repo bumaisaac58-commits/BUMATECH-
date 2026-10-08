@@ -1,4 +1,4 @@
--- BU MULTI-SCHOOL SETUP
+-- BUMATECH MULTI-SCHOOL SETUP
 -- Run this entire script in Supabase SQL Editor.
 -- It assumes Supabase Auth is enabled.
 
