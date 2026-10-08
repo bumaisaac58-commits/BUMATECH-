@@ -1,14 +1,11 @@
 /* BUMATECH Setup Wizard
    1. Set SUPABASE_URL and SUPABASE_ANON_KEY below.
    2. Run supabase_setup.sql in your Supabase SQL Editor.
-*/
-const SUPABASE_URL = "https://kgibditegnkghtvcmilc.supabase.co/rest/v1/";
-const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtnaWJkaXRlZ25rZ2h0dmNtaWxjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTA4NTkyMDUsImV4cCI6MjEwNjQzNTIwNX0.XE5j1guWFYnz6SwftIPFAh7lkFUVa8D5dXKkeuuNkPs";
+ */
+const SUPABASE_URL = "https://kgibditegnkghtvcmilc.supabase.co";
+const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtnaWJkaXRlZ25rZ2h0dmNtaWxjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTA4NTkyMDUsImV4cCI6MjEwNjQzNTIwNX0.XE5j1T2n2nqV5gJm2E0HcY1gt-_QwYx0-BN2SNe9xAE";
 
-const SUPABASE_URL = "YOUR_SUPABASE_URL";
-const SUPABASE_ANON_KEY = "YOUR_SUPABASE_ANON_KEY";
-
-const db = supabase.createClient(
+const db = window.supabase.createClient(
   SUPABASE_URL,
   SUPABASE_ANON_KEY
 );
@@ -291,11 +288,11 @@ async function saveSchool() {
     const updateResult = await db.from("schools").update({ setup_complete: true }).eq("id", schoolId);
     if (updateResult.error) throw updateResult.error;
 
-    localStorage.removeItem("mwalimuease_setup");
+    localStorage.removeItem("BUMATECH_setup");
     document.querySelectorAll("[data-panel]").forEach(panel => panel.classList.add("hidden"));
     document.querySelector('[data-panel="7"]').classList.remove("hidden");
     document.querySelector('[data-panel="7"] .card-heading h2').textContent = "School created successfully!";
-    $("review").innerHTML = `<div class="success-box">🎉 <b>${data.school.name}</b> is now registered in BUMATECH.<br><br>School code: <b>${data.school.code.toUpperCase()}</b><br>School ID: <b>${schoolId}</b><br><br>You can now connect your dashboard to this school and start adding learners, teachers, parents and fees.</div>`;
+    $("review").innerHTML = `<div class="success-box">🎉 <b>${data.school.name}</b> is now registered in BUMATECH.<br><br>School code: <b>${data.school.code.toUpperCase()}</b><br>School ID: <b>${schoolId}</b></div>`;
     $("backBtn").disabled = true;
     $("saveBtn").disabled = true;
     $("nextBtn").textContent = "Go to Dashboard";
