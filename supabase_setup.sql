@@ -1,194 +1,428 @@
--- BUMATECH MULTI-SCHOOL SETUP
--- Run this entire script in Supabase SQL Editor.
--- It assumes Supabase Auth is enabled.
+/* =========================================
+ BUMATECH - APP.JS
+   Main Supabase Application Controller
+   ========================================= */
 
-create extension if not exists pgcrypto;
-
-create table if not exists public.schools (
-  id uuid primary key default gen_random_uuid(),
-  owner_id uuid not null references auth.users(id) on delete restrict,
-  name text not null,
-  code text not null unique,
-  knec_code text,
-  school_type text,
-  county text,
-  sub_county text,
-  category text,
-  attendance_type text,
-  motto text,
-  logo_url text,
-  setup_complete boolean not null default false,
-  created_at timestamptz not null default now()
+const SUPABASE_URL = "YOUR_SUPABASE_PROJECT_URLhttps://kgibditegnkghtvcmilc.supabase.co/rest/v1/
+const SUPABASE_ANON_KEY = "YOUR_SUPABASE_ANON_KEY";
+eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtnaWJkaXRlZ25rZ2h0dmNtaWxjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTA4NTkyMDUsImV4cCI6MjEwNjQzNTIwNX0.XE5j1guWFYnz6SwftIPFAh7lkFUVa8D5dXKkeuuNkPs
+const db = supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_ANON_KEY
 );
 
-create table if not exists public.school_classes (
-  id uuid primary key default gen_random_uuid(),
-  school_id uuid not null references public.schools(id) on delete cascade,
-  name text not null,
-  academic_year integer not null,
-  stream_count integer not null default 1,
-  created_at timestamptz not null default now(),
-  unique(school_id,name,academic_year)
+
+/* =========================================
+   CHECK LOGIN
+   ========================================= */
+
+async function checkLogin() {
+
+    const {
+        data: {
+            session
+        },
+        error
+    } = await db.auth.getSession();
+
+    if (error) {
+        console.error("Session error:", error);
+        return null;
+    }
+
+    if (!session) {
+        window.location.href = "login.html";
+        return null;
+    }
+
+    return session;
+}
+
+
+/* =========================================
+   GET CURRENT USER
+   ========================================= */
+
+async function getCurrentUser() {
+
+    const {
+        data: {
+            user
+        },
+        error
+    } = await db.auth.getUser();
+
+    if (error) {
+        console.error("User error:", error);
+        return null;
+    }
+
+    return user;
+}
+
+
+/* =========================================
+   GET CURRENT SCHOOL
+   ========================================= */
+
+async function getCurrentSchool() {
+
+    const user = await getCurrentUser();
+
+    if (!user) {
+        return null;
+    }
+
+    const {
+        data,
+        error
+    } = await db
+        .from("schools")
+        .select("*")
+        .eq("owner_id", user.id)
+        .limit(1);
+
+    if (error) {
+
+        console.error(
+            "School loading error:",
+            error
+        );
+
+        return null;
+    }
+
+    if (!data || data.length === 0) {
+        return null;
+    }
+
+    return data[0];
+}
+
+
+/* =========================================
+   LOGOUT
+   ========================================= */
+
+async function logout() {
+
+    const {
+        error
+    } = await db.auth.signOut();
+
+    if (error) {
+
+        alert(
+            "Logout failed: " +
+            error.message
+        );
+
+        return;
+    }
+
+    window.location.href =
+        "login.html";
+}
+
+
+/* =========================================
+   GO TO PAGE
+   ========================================= */
+
+function goTo(page) {
+
+    window.location.href = page;
+
+}
+
+
+/* =========================================
+   DASHBOARD
+   ========================================= */
+
+async function loadDashboard() {
+
+    const session =
+        await checkLogin();
+
+    if (!session) {
+        return;
+    }
+
+    const school =
+        await getCurrentSchool();
+
+    if (!school) {
+
+        console.log(
+            "No school registered yet."
+        );
+
+        return;
+    }
+
+    const schoolName =
+        document.getElementById(
+            "schoolName"
+        );
+
+    if (schoolName) {
+
+        schoolName.textContent =
+            school.name || "My School";
+    }
+
+
+    const schoolCode =
+        document.getElementById(
+            "schoolCode"
+        );
+
+    if (schoolCode) {
+
+        schoolCode.textContent =
+            school.code || "";
+    }
+
+
+    await loadDashboardStatistics(
+        school.id
+    );
+}
+
+
+/* =========================================
+   DASHBOARD STATISTICS
+   ========================================= */
+
+async function loadDashboardStatistics(
+    schoolId
+) {
+
+    /* STUDENTS */
+
+    const {
+        count: studentCount,
+        error: studentError
+    } = await db
+        .from("students")
+        .select(
+            "id",
+            {
+                count: "exact",
+                head: true
+            }
+        )
+        .eq(
+            "school_id",
+            schoolId
+        );
+
+
+    if (!studentError) {
+
+        const element =
+            document.getElementById(
+                "studentCount"
+            );
+
+        if (element) {
+
+            element.textContent =
+                studentCount || 0;
+        }
+    }
+
+
+    /* TEACHERS */
+
+    const {
+        count: teacherCount
+    } = await db
+        .from("teachers")
+        .select(
+            "id",
+            {
+                count: "exact",
+                head: true
+            }
+        )
+        .eq(
+            "school_id",
+            schoolId
+        );
+
+
+    const teacherElement =
+        document.getElementById(
+            "teacherCount"
+        );
+
+    if (teacherElement) {
+
+        teacherElement.textContent =
+            teacherCount || 0;
+    }
+
+
+    /* CLASSES */
+
+    const {
+        count: classCount
+    } = await db
+        .from("school_classes")
+        .select(
+            "id",
+            {
+                count: "exact",
+                head: true
+            }
+        )
+        .eq(
+            "school_id",
+            schoolId
+        );
+
+
+    const classElement =
+        document.getElementById(
+            "classCount"
+        );
+
+    if (classElement) {
+
+        classElement.textContent =
+            classCount || 0;
+    }
+
+
+    /* SUBJECTS */
+
+    const {
+        count: subjectCount
+    } = await db
+        .from("school_subjects")
+        .select(
+            "id",
+            {
+                count: "exact",
+                head: true
+            }
+        )
+        .eq(
+            "school_id",
+            schoolId
+        );
+
+
+    const subjectElement =
+        document.getElementById(
+            "subjectCount"
+        );
+
+    if (subjectElement) {
+
+        subjectElement.textContent =
+            subjectCount || 0;
+    }
+
+}
+
+
+/* =========================================
+   OPEN STUDENTS
+   ========================================= */
+
+function openStudents() {
+
+    window.location.href =
+        "students.html";
+}
+
+
+/* =========================================
+   OPEN TEACHERS
+   ========================================= */
+
+function openTeachers() {
+
+    window.location.href =
+        "teachers.html";
+}
+
+
+/* =========================================
+   OPEN CLASSES
+   ========================================= */
+
+function openClasses() {
+
+    window.location.href =
+        "classes.html";
+}
+
+
+/* =========================================
+   OPEN SUBJECTS
+   ========================================= */
+
+function openSubjects() {
+
+    window.location.href =
+        "subjects.html";
+}
+
+
+/* =========================================
+   OPEN SETUP WIZARD
+   ========================================= */
+
+function openSetupWizard() {
+
+    window.location.href =
+        "setup-wizard.html";
+}
+
+
+/* =========================================
+   OPEN SCHOOL SETTINGS
+   ========================================= */
+
+function openSchoolSettings() {
+
+    window.location.href =
+        "school-settings.html";
+}
+
+
+/* =========================================
+   PAGE START
+   ========================================= */
+
+document.addEventListener(
+    "DOMContentLoaded",
+    async function () {
+
+        const page =
+            window.location.pathname;
+
+        /*
+         * Run dashboard functions only
+         * when dashboard elements exist.
+         */
+
+        if (
+            document.getElementById(
+                "studentCount"
+            ) ||
+            document.getElementById(
+                "schoolName"
+            )
+        ) {
+
+            await loadDashboard();
+
+        }
+
+    }
 );
-
-create table if not exists public.school_subjects (
-  id uuid primary key default gen_random_uuid(),
-  school_id uuid not null references public.schools(id) on delete cascade,
-  name text not null,
-  active boolean not null default true,
-  created_at timestamptz not null default now(),
-  unique(school_id,name)
-);
-
-create table if not exists public.school_settings (
-  id uuid primary key default gen_random_uuid(),
-  school_id uuid not null unique references public.schools(id) on delete cascade,
-  assessment_system text default 'CBC / CBE',
-  grading_scale text default 'Kenya CBC',
-  terms_per_year integer default 3,
-  lessons_per_day integer default 13,
-  start_time time default '07:30',
-  end_time time default '16:30',
-  enable_timetable boolean default true,
-  enable_sms boolean default false,
-  currency text default 'KES',
-  fees_mode text default 'Enabled',
-  parent_portal text default 'Enabled',
-  boarding_mode text default 'Disabled',
-  created_at timestamptz not null default now()
-);
-
-create table if not exists public.school_members (
-  id uuid primary key default gen_random_uuid(),
-  school_id uuid not null references public.schools(id) on delete cascade,
-  user_id uuid not null references auth.users(id) on delete cascade,
-  full_name text not null,
-  phone text,
-  role text not null default 'Teacher',
-  is_owner boolean not null default false,
-  created_at timestamptz not null default now(),
-  unique(school_id,user_id)
-);
-
-create index if not exists school_classes_school_id_idx on public.school_classes(school_id);
-create index if not exists school_subjects_school_id_idx on public.school_subjects(school_id);
-create index if not exists school_members_school_id_idx on public.school_members(school_id);
-create index if not exists school_members_user_id_idx on public.school_members(user_id);
-
-alter table public.schools enable row level security;
-alter table public.school_classes enable row level security;
-alter table public.school_subjects enable row level security;
-alter table public.school_settings enable row level security;
-alter table public.school_members enable row level security;
-
--- Helper: a logged-in user can access a school if they are a member.
-create or replace function public.is_school_member(p_school_id uuid)
-returns boolean
-language sql
-stable
-security definer
-set search_path = public
-as $$
-  select exists (
-    select 1 from public.school_members
-    where school_id = p_school_id and user_id = auth.uid()
-  );
-$$;
-
-create or replace function public.is_school_owner(p_school_id uuid)
-returns boolean
-language sql
-stable
-security definer
-set search_path = public
-as $$
-  select exists (
-    select 1 from public.schools
-    where id = p_school_id and owner_id = auth.uid()
-  );
-$$;
-
--- Schools: owner can create/read/update their own school.
-drop policy if exists "school owner insert" on public.schools;
-create policy "school owner insert" on public.schools for insert
-with check (owner_id = auth.uid());
-
-drop policy if exists "school members read school" on public.schools;
-create policy "school members read school" on public.schools for select
-using (owner_id = auth.uid() or public.is_school_member(id));
-
-drop policy if exists "school owner update" on public.schools;
-create policy "school owner update" on public.schools for update
-using (owner_id = auth.uid())
-with check (owner_id = auth.uid());
-
--- Classes
-drop policy if exists "members read classes" on public.school_classes;
-create policy "members read classes" on public.school_classes for select
-using (public.is_school_member(school_id) or public.is_school_owner(school_id));
-
-drop policy if exists "members insert classes" on public.school_classes;
-create policy "members insert classes" on public.school_classes for insert
-with check (public.is_school_member(school_id) or public.is_school_owner(school_id));
-
-drop policy if exists "members update classes" on public.school_classes;
-create policy "members update classes" on public.school_classes for update
-using (public.is_school_member(school_id) or public.is_school_owner(school_id));
-
-drop policy if exists "members delete classes" on public.school_classes;
-create policy "members delete classes" on public.school_classes for delete
-using (public.is_school_member(school_id) or public.is_school_owner(school_id));
-
--- Subjects
-drop policy if exists "members read subjects" on public.school_subjects;
-create policy "members read subjects" on public.school_subjects for select
-using (public.is_school_member(school_id) or public.is_school_owner(school_id));
-
-drop policy if exists "members insert subjects" on public.school_subjects;
-create policy "members insert subjects" on public.school_subjects for insert
-with check (public.is_school_member(school_id) or public.is_school_owner(school_id));
-
-drop policy if exists "members update subjects" on public.school_subjects;
-create policy "members update subjects" on public.school_subjects for update
-using (public.is_school_member(school_id) or public.is_school_owner(school_id));
-
--- Settings
-drop policy if exists "members read settings" on public.school_settings;
-create policy "members read settings" on public.school_settings for select
-using (public.is_school_member(school_id) or public.is_school_owner(school_id));
-
-drop policy if exists "members insert settings" on public.school_settings;
-create policy "members insert settings" on public.school_settings for insert
-with check (public.is_school_member(school_id) or public.is_school_owner(school_id));
-
-drop policy if exists "members update settings" on public.school_settings;
-create policy "members update settings" on public.school_settings for update
-using (public.is_school_member(school_id) or public.is_school_owner(school_id));
-
--- Members: a user can see members in schools they belong to.
-drop policy if exists "members read members" on public.school_members;
-create policy "members read members" on public.school_members for select
-using (public.is_school_member(school_id) or public.is_school_owner(school_id));
-
-drop policy if exists "owner insert member" on public.school_members;
-create policy "owner insert member" on public.school_members for insert
-with check (public.is_school_owner(school_id) or user_id = auth.uid());
-
-drop policy if exists "owner update member" on public.school_members;
-create policy "owner update member" on public.school_members for update
-using (public.is_school_owner(school_id));
-
--- Optional storage bucket for school logos.
-insert into storage.buckets (id, name, public)
-values ('school-logos','school-logos',true)
-on conflict (id) do nothing;
-
-drop policy if exists "school logo upload" on storage.objects;
-create policy "school logo upload" on storage.objects
-for insert to authenticated
-with check (bucket_id = 'school-logos');
-
-drop policy if exists "school logo public read" on storage.objects;
-create policy "school logo public read" on storage.objects
-for select
-using (bucket_id = 'school-logos');
