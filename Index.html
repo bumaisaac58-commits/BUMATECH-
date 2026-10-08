@@ -1,833 +1,186 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#2563eb">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>BUMATECH| Admin Dashboard</title>
+  <title>MwalimuEase | School Management System</title>
 
-<link rel="stylesheet" href="style.css">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
-<style>
-.dashboard{
-  max-width:1180px;
-  margin:auto;
-  padding:20px 16px 50px;
-}
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f7fb;
+      color: #1f2937;
+    }
 
-.dash-head{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  gap:16px;
-  margin-bottom:22px;
-}
+    header {
+      background: #0756a8;
+      color: white;
+      padding: 18px;
+      text-align: center;
+    }
 
-.dash-head h1{
-  font-size:clamp(24px,5vw,34px);
-}
+    header h1 {
+      font-size: 26px;
+    }
 
-.dash-head p{
-  color:#667085;
-  margin-top:4px;
-}
+    header p {
+      margin-top: 5px;
+      font-size: 14px;
+    }
 
-.user-pill{
-  display:flex;
-  align-items:center;
-  gap:9px;
-  background:#fff;
-  border:1px solid #e5e7eb;
-  border-radius:14px;
-  padding:9px 12px;
-}
+    .container {
+      max-width: 1100px;
+      margin: 25px auto;
+      padding: 15px;
+    }
 
-.avatar{
-  width:36px;
-  height:36px;
-  border-radius:50%;
-  display:grid;
-  place-items:center;
-  background:#2563eb;
-  color:#fff;
-  font-weight:800;
-}
+    .welcome {
+      background: white;
+      padding: 25px;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      margin-bottom: 20px;
+    }
 
-.user-pill small{
-  display:block;
-  color:#667085;
-  font-size:11px;
-}
+    .welcome h2 {
+      color: #0756a8;
+      margin-bottom: 10px;
+    }
 
-.welcome{
-  background:linear-gradient(135deg,#2563eb,#4f46e5);
-  color:#fff;
-  border-radius:20px;
-  padding:24px;
-  margin-bottom:18px;
-  box-shadow:0 12px 30px #2563eb25;
-}
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 15px;
+    }
 
-.welcome p{
-  opacity:.9;
-  margin-top:6px;
-  font-size:13px;
-}
+    .card {
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      text-align: center;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
 
-.welcome button{
-  margin-top:16px;
-}
+    .card h3 {
+      color: #0756a8;
+      margin-bottom: 8px;
+    }
 
-.stats{
-  display:grid;
-  grid-template-columns:repeat(4,1fr);
-  gap:13px;
-  margin-bottom:18px;
-}
+    .card p {
+      font-size: 14px;
+      color: #666;
+    }
 
-.stat{
-  background:#fff;
-  border:1px solid #e5e7eb;
-  border-radius:16px;
-  padding:17px;
-}
+    .btn {
+      display: inline-block;
+      margin-top: 20px;
+      background: #0756a8;
+      color: white;
+      padding: 12px 20px;
+      border-radius: 8px;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+    }
 
-.stat-icon{
-  font-size:25px;
-}
+    .btn:hover {
+      background: #063d78;
+    }
 
-.stat small{
-  display:block;
-  color:#667085;
-  margin-top:8px;
-}
+    footer {
+      margin-top: 40px;
+      padding: 20px;
+      text-align: center;
+      background: #0756a8;
+      color: white;
+      font-size: 13px;
+    }
 
-.stat b{
-  display:block;
-  font-size:23px;
-  margin-top:2px;
-}
+    @media (max-width: 600px) {
+      header h1 {
+        font-size: 22px;
+      }
 
-.modules{
-  display:grid;
-  grid-template-columns:repeat(4,1fr);
-  gap:13px;
-}
-
-.module{
-  background:#fff;
-  border:1px solid #e5e7eb;
-  border-radius:16px;
-  padding:18px;
-  text-align:left;
-  text-decoration:none;
-  color:#172033;
-  transition:.2s;
-}
-
-.module:hover{
-  transform:translateY(-2px);
-  box-shadow:0 8px 25px #17203310;
-  border-color:#bfdbfe;
-}
-
-.module-icon{
-  font-size:27px;
-}
-
-.module b{
-  display:block;
-  margin-top:10px;
-}
-
-.module small{
-  display:block;
-  color:#667085;
-  margin-top:4px;
-}
-
-.setup-alert{
-  background:#fff7ed;
-  border:1px solid #fed7aa;
-  color:#9a3412;
-  border-radius:15px;
-  padding:15px;
-  margin-bottom:18px;
-}
-
-.hidden{
-  display:none !important;
-}
-
-@media(max-width:800px){
-
-  .stats{
-    grid-template-columns:repeat(2,1fr);
-  }
-
-  .modules{
-    grid-template-columns:repeat(2,1fr);
-  }
-
-}
-
-@media(max-width:480px){
-
-  .dash-head{
-    align-items:flex-start;
-    flex-direction:column;
-  }
-
-  .user-pill{
-    width:100%;
-  }
-
-  .modules{
-    grid-template-columns:1fr;
-  }
-
-  .stats{
-    grid-template-columns:repeat(2,1fr);
-  }
-
-}
-</style>
+      .container {
+        margin: 15px auto;
+      }
+    }
+  </style>
 </head>
 
 <body>
 
-<header class="topbar">
+  <header>
+    <h1>📚 BUMATECH </h1>
+    <p>School Management System</p>
+  </header>
 
-  <div class="brand">
+  <main class="container">
 
-    <div class="brand-mark">
-      ME
-    </div>
-
-    <div>
-      <strong>BUMATECH</strong>
-      <small>Administrator Portal</small>
-    </div>
-
-  </div>
-
-  <button id="logoutBtn" class="ghost-btn">
-    Logout
-  </button>
-
-</header>
-
-
-<main class="dashboard">
-
-  <!-- HEADER -->
-
-  <div class="dash-head">
-
-    <div>
-
-      <h1>
-        Admin Dashboard
-      </h1>
-
+    <section class="welcome">
+      <h2>Welcome to BUMATECH </h2>
       <p>
-        Manage your school from one place.
+        A modern school management system for managing
+        students, teachers, classes, subjects, marks and school records.
       </p>
 
-    </div>
+      <button class="btn" onclick="openDashboard()">
+        Open Dashboard
+      </button>
+    </section>
 
+    <section class="cards">
 
-    <div class="user-pill">
-
-      <div id="avatar" class="avatar">
-        A
+      <div class="card">
+        <h3>👨‍🎓 Students</h3>
+        <p>Manage student records and classes.</p>
       </div>
 
-      <div>
-
-        <b id="adminName">
-          Administrator
-        </b>
-
-        <small id="adminEmail">
-          Loading...
-        </small>
-
+      <div class="card">
+        <h3>👩‍🏫 Teachers</h3>
+        <p>Manage teachers and staff information.</p>
       </div>
 
-    </div>
-
-  </div>
-
-
-  <!-- SETUP ALERT -->
-
-  <div id="setupAlert" class="setup-alert hidden">
-
-    <b>
-      🏫 School setup is not complete
-    </b>
-
-    <div style="margin-top:6px">
-
-      Complete the Setup Wizard to create your
-      school's classes, subjects and settings.
-
-    </div>
-
-    <button
-      id="setupBtn"
-      class="primary-btn">
-
-      Continue School Setup →
-
-    </button>
-
-  </div>
-
-
-  <!-- WELCOME -->
-
-  <section class="welcome">
-
-    <h2 id="schoolGreeting">
-      Welcome to BUMATECH 👋
-    </h2>
-
-    <p id="schoolStatus">
-      Your school management system is ready.
-    </p>
-
-    <button
-      id="wizardBtn"
-      class="primary-btn">
-
-      🏫 School Setup Wizard
-
-    </button>
-
-  </section>
-
-
-  <!-- STATISTICS -->
-
-  <section class="stats">
-
-    <div class="stat">
-
-      <div class="stat-icon">
-        🏫
+      <div class="card">
+        <h3>📖 Classes</h3>
+        <p>Manage classes and class teachers.</p>
       </div>
 
-      <small>
-        Schools
-      </small>
-
-      <b id="schoolCount">
-        0
-      </b>
-
-    </div>
-
-
-    <div class="stat">
-
-      <div class="stat-icon">
-        👩🏽‍🏫
+      <div class="card">
+        <h3>📝 Marks</h3>
+        <p>Enter and manage learner assessment results.</p>
       </div>
 
-      <small>
-        Staff
-      </small>
-
-      <b id="staffCount">
-        0
-      </b>
-
-    </div>
-
-
-    <div class="stat">
-
-      <div class="stat-icon">
-        📚
+      <div class="card">
+        <h3>📚 Subjects</h3>
+        <p>Manage subjects and subject allocations.</p>
       </div>
 
-      <small>
-        Subjects
-      </small>
-
-      <b id="subjectCount">
-        0
-      </b>
-
-    </div>
-
-
-    <div class="stat">
-
-      <div class="stat-icon">
-        🎓
+      <div class="card">
+        <h3>📊 Reports</h3>
+        <p>View school academic reports and analysis.</p>
       </div>
 
-      <small>
-        Classes
-      </small>
-
-      <b id="classCount">
-        0
-      </b>
-
-    </div>
-
-  </section>
-
-
-  <!-- MODULES -->
-
-  <section class="modules">
-
-
-    <a class="module" href="#">
-
-      <span class="module-icon">
-        👩🏽‍🏫
-      </span>
-
-      <b>
-        Teachers
-      </b>
-
-      <small>
-        Manage teaching staff
-      </small>
-
-    </a>
-
-
-    <a class="module" href="#">
-
-      <span class="module-icon">
-        👨‍🎓
-      </span>
-
-      <b>
-        Students
-      </b>
-
-      <small>
-        Register learners
-      </small>
-
-    </a>
-
-
-    <a class="module" href="#">
-
-      <span class="module-icon">
-        👨‍👩‍👧
-      </span>
-
-      <b>
-        Parents
-      </b>
-
-      <small>
-        Parent records
-      </small>
-
-    </a>
-
-
-    <a class="module" href="#">
-
-      <span class="module-icon">
-        🏫
-      </span>
-
-      <b>
-        Classes
-      </b>
-
-      <small>
-        Classes and streams
-      </small>
-
-    </a>
-
-
-    <a class="module" href="#">
-
-      <span class="module-icon">
-        📚
-      </span>
-
-      <b>
-        Subjects
-      </b>
-
-      <small>
-        Subject allocation
-      </small>
-
-    </a>
-
-
-    <a class="module" href="#">
-
-      <span class="module-icon">
-        📊
-      </span>
-
-      <b>
-        Marks
-      </b>
-
-      <small>
-        Assessment and results
-      </small>
-
-    </a>
-
-
-    <a class="module" href="#">
-
-      <span class="module-icon">
-        💰
-      </span>
-
-      <b>
-        Fees
-      </b>
-
-      <small>
-        Fees and payments
-      </small>
-
-    </a>
-
-
-    <a class="module" href="#">
-
-      <span class="module-icon">
-        📅
-      </span>
-
-      <b>
-        Timetable
-      </b>
-
-      <small>
-        13-lesson timetable
-      </small>
-
-    </a>
-
-
-    <a class="module" href="#">
-
-      <span class="module-icon">
-        📱
-      </span>
-
-      <b>
-        Bulk SMS
-      </b>
-
-      <small>
-        School communication
-      </small>
-
-    </a>
-
-
-    <a class="module" href="#">
-
-      <span class="module-icon">
-        ⚙️
-      </span>
-
-      <b>
-        School Settings
-      </b>
-
-      <small>
-        Configure your school
-      </small>
-
-    </a>
-
-
-    <a class="module" href="#">
-
-      <span class="module-icon">
-        📈
-      </span>
-
-      <b>
-        Reports
-      </b>
-
-      <small>
-        School reports
-      </small>
-
-    </a>
-
-
-    <a class="module" href="#">
-
-      <span class="module-icon">
-        🔐
-      </span>
-
-      <b>
-        Security
-      </b>
-
-      <small>
-        Account and access
-      </small>
-
-    </a>
-
-  </section>
-
-</main>
-
-
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-<script>
-
-const SUPABASE_URL =
-"YOUR_SUPABASE_PROJECT_URL";
-
-const SUPABASE_ANON_KEY =
-"YOUR_SUPABASE_ANON_KEY";
-
-
-const db =
-supabase.createClient(
-  SUPABASE_URL,
-  SUPABASE_ANON_KEY
-);
-
-
-const $ = id =>
-document.getElementById(id);
-
-
-async function loadDashboard(){
-
-  if(
-    SUPABASE_URL.startsWith("YOUR_")
-  ){
-
-    alert(
-      "Add your Supabase Project URL and Publishable/anon key."
-    );
-
-    return;
-  }
-
-
-  const {
-    data:{user},
-    error
-  } =
-  await db.auth.getUser();
-
-
-  if(error || !user){
-
-    location.href =
-    "login.html";
-
-    return;
-  }
-
-
-  /*
-  DISPLAY LOGGED-IN ADMIN
-  */
-
-  $("adminEmail").textContent =
-  user.email || "";
-
-  $("avatar").textContent =
-  (user.email || "A")
-  .charAt(0)
-  .toUpperCase();
-
-
-  /*
-  FIND ADMIN'S SCHOOL
-  */
-
-  const {
-    data:schools,
-    error:schoolError
-  } =
-  await db
-  .from("schools")
-  .select("*")
-  .eq("owner_id",user.id)
-  .order(
-    "created_at",
-    {ascending:false}
-  );
-
-
-  if(schoolError){
-
-    console.error(
-      schoolError
-    );
-
-    return;
-  }
-
-
-  const school =
-  schools && schools.length
-  ? schools[0]
-  : null;
-
-
-  $("schoolCount").textContent =
-  schools?.length || 0;
-
-
-  /*
-  NO SCHOOL YET
-  */
-
-  if(!school){
-
-    $("adminName").textContent =
-    "Administrator";
-
-    $("schoolGreeting").textContent =
-    "Welcome to MwalimuEase 👋";
-
-    $("schoolStatus").textContent =
-    "No school has been registered yet. Start the Setup Wizard.";
-
-    $("setupAlert")
-    .classList
-    .remove("hidden");
-
-    return;
-  }
-
-
-  /*
-  SCHOOL INFORMATION
-  */
-
-  $("adminName").textContent =
-  school.name;
-
-
-  $("schoolGreeting").textContent =
-  `Welcome to ${school.name} 👋`;
-
-
-  if(school.setup_complete){
-
-    $("schoolStatus").textContent =
-    "School setup is complete.";
-
-  }else{
-
-    $("schoolStatus").textContent =
-    "School setup needs to be completed.";
-
-    $("setupAlert")
-    .classList
-    .remove("hidden");
-
-  }
-
-
-  /*
-  LOAD COUNTS
-  */
-
-  const [
-
-    staffResult,
-
-    subjectsResult,
-
-    classesResult
-
-  ] = await Promise.all([
-
-    db
-    .from("school_members")
-    .select("*",{count:"exact",head:true})
-    .eq("school_id",school.id),
-
-    db
-    .from("school_subjects")
-    .select("*",{count:"exact",head:true})
-    .eq("school_id",school.id),
-
-    db
-    .from("school_classes")
-    .select("*",{count:"exact",head:true})
-    .eq("school_id",school.id)
-
-  ]);
-
-
-  $("staffCount").textContent =
-  staffResult.count || 0;
-
-  $("subjectCount").textContent =
-  subjectsResult.count || 0;
-
-  $("classCount").textContent =
-  classesResult.count || 0;
-
-}
-
-
-$("wizardBtn").onclick =
-function(){
-
-  location.href =
-  "setup-wizard.html";
-
-};
-
-
-$("setupBtn").onclick =
-function(){
-
-  location.href =
-  "setup-wizard.html";
-
-};
-
-
-$("logoutBtn").onclick =
-async function(){
-
-  await db.auth.signOut();
-
-  location.href =
-  "login.html";
-
-};
-
-
-loadDashboard();
-
-</script>
+    </section>
+
+  </main>
+
+  <footer>
+    © 2026 BUMATECH | School Management System
+  </footer>
+
+  <script>
+    function openDashboard() {
+      alert("BUMATECH Dashboard is ready.");
+    }
+  </script>
 
 </body>
 </html>
