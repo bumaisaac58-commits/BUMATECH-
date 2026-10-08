@@ -1,4 +1,4 @@
--- MWALIMUEASE MULTI-SCHOOL SETUP
+-- BU MULTI-SCHOOL SETUP
 -- Run this entire script in Supabase SQL Editor.
 -- It assumes Supabase Auth is enabled.
 
