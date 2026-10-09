@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BUMATECH Dashboard</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<div class="dashboard">
+
+  <aside class="sidebar">
+
+    <h1>📘 BUMATECH </h1>
+
+    <button onclick="showPage('dashboard')">🏠 Dashboard</button>
+    <button onclick="showPage('teachers')">👨‍🏫 Teachers</button>
+    <button onclick="showPage('students')">👨‍🎓 Students</button>
+    <button onclick="showPage('classes')">🏫 Classes</button>
+    <button onclick="showPage('subjects')">📚 Subjects</button>
+    <button onclick="showPage('marks')">📝 Marks</button>
+    <button onclick="showPage('timetable')">📅 Timetable</button>
+    <button onclick="showPage('sms')">💬 Bulk SMS</button>
+    <button onclick="showPage('setup')">⚙️ School Setup</button>
+    <button onclick="showPage('settings')">🔧 Settings</button>
+
+  </aside>
+
+  <main class="main">
+
+    <section id="dashboard">
+
+      <h1>Dashboard</h1>
+      <p>Welcome to your BUMATECH School Management System.</p>
+
+      <div class="cards">
+
+        <div class="card">
+          <h3>👨‍🏫 Teachers</h3>
+          <h2 id="teacherCount">0</h2>
+          <p>Registered teachers</p>
+        </div>
+
+        <div class="card">
+          <h3>👨‍🎓 Students</h3>
+          <h2 id="studentCount">0</h2>
+          <p>Registered learners</p>
+        </div>
+
+        <div class="card">
+          <h3>🏫 Classes</h3>
+          <h2>PP1 - Grade 9</h2>
+          <p>School classes</p>
+        </div>
+
+        <div class="card">
+          <h3>📝 Marks</h3>
+          <h2>0</h2>
+          <p>Results entered</p>
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <section id="teachers" style="display:none">
+
+      <h1>👨‍🏫 Teachers</h1>
+      <p>Manage school teachers.</p>
+
+      <button onclick="addTeacher()">+ Add Teacher</button>
+
+      <div class="card">
+        <h3>Teacher Management</h3>
+        <p>Add, edit, search and manage teachers.</p>
+      </div>
+
+    </section>
+
+
+    <section id="students" style="display:none">
+
+      <h1>👨‍🎓 Students</h1>
+      <p>Manage learners.</p>
+
+      <button onclick="addStudent()">+ Add Student</button>
+
+      <div class="card">
+        <h3>Student Management</h3>
+        <p>Register and manage students from PP1 to Grade 9.</p>
+      </div>
+
+    </section>
+
+
+    <section id="classes" style="display:none">
+
+      <h1>🏫 Classes</h1>
+
+      <div class="card">
+        <h3>School Classes</h3>
+
+        <p>PP1</p>
+        <p>PP2</p>
+        <p>Grade 1</p>
+        <p>Grade 2</p>
+        <p>Grade 3</p>
+        <p>Grade 4</p>
+        <p>Grade 5</p>
+        <p>Grade 6</p>
+        <p>Grade 7</p>
+        <p>Grade 8</p>
+        <p>Grade 9</p>
+
+      </div>
+
+    </section>
+
+
+    <section id="subjects" style="display:none">
+
+      <h1>📚 Subjects</h1>
+
+      <div class="card">
+        <h3>Subject Management</h3>
+        <p>Set up CBC subjects and subject allocations.</p>
+      </div>
+
+    </section>
+
+
+    <section id="marks" style="display:none">
+
+      <h1>📝 Marks</h1>
+
+      <div class="card">
+        <h3>Marks Management</h3>
+        <p>Enter, edit and analyse learner results.</p>
+      </div>
+
+    </section>
+
+
+    <section id="timetable" style="display:none">
+
+      <h1>📅 Timetable</h1>
+
+      <div class="card">
+        <h3>Timetable Generator</h3>
+        <p>Create school timetables for teachers and classes.</p>
+
+        <button onclick="alert('Timetable generator will be added next.')">
+          Generate Timetable
+        </button>
+      </div>
+
+    </section>
+
+
+    <section id="sms" style="display:none">
+
+      <h1>💬 Bulk SMS</h1>
+
+      <div class="card">
+        <h3>Send SMS</h3>
+
+        <textarea
+          id="smsMessage"
+          placeholder="Type your message here..."
+          style="width:100%;height:120px;padding:12px;margin:15px 0;">
+        </textarea>
+
+        <button onclick="sendSMS()">Send SMS</button>
+
+      </div>
+
+    </section>
+
+
+    <section id="setup" style="display:none">
+
+      <h1>⚙️ School Setup</h1>
+
+      <div class="card">
+
+        <h3>School Information</h3>
+
+        <input
+          id="schoolName"
+          placeholder="School name"
+          style="width:100%;padding:12px;margin:10px 0;">
+
+        <input
+          id="schoolCode"
+          placeholder="School code"
+          style="width:100%;padding:12px;margin:10px 0;">
+
+        <button onclick="saveSchool()">
+          Save School
+        </button>
+
+      </div>
+
+    </section>
+
+
+    <section id="settings" style="display:none">
+
+      <h1>🔧 Settings</h1>
+
+      <div class="card">
+
+        <h3>System Settings</h3>
+
+        <p>BUMATECH version 1.0</p>
+
+        <button onclick="location.href='index.html'">
+          Logout
+        </button>
+
+      </div>
+
+    </section>
+
+  </main>
+
+</div>
+
+<script src="app.js"></script>
+
+<script>
+
+function showPage(page) {
+
+  const sections = [
+    'dashboard',
+    'teachers',
+    'students',
+    'classes',
+    'subjects',
+    'marks',
+    'timetable',
+    'sms',
+    'setup',
+    'settings'
+  ];
+
+  sections.forEach(function(section) {
+
+    document.getElementById(section).style.display = 'none';
+
+  });
+
+  document.getElementById(page).style.display = 'block';
+
+}
+
+
+function addTeacher() {
+
+  const name = prompt("Enter teacher name:");
+
+  if (name) {
+
+    localStorage.setItem(
+      "teacher_" + Date.now(),
+      name
+    );
+
+    alert("Teacher added successfully.");
+
+  }
+
+}
+
+
+function addStudent() {
+
+  const name = prompt("Enter student name:");
+
+  if (name) {
+
+    localStorage.setItem(
+      "student_" + Date.now(),
+      name
+    );
+
+    alert("Student added successfully.");
+
+  }
+
+}
+
+
+function saveSchool() {
+
+  const name =
+    document.getElementById("schoolName").value;
+
+  const code =
+    document.getElementById("schoolCode").value;
+
+  localStorage.setItem("schoolName", name);
+  localStorage.setItem("schoolCode", code);
+
+  alert("School information saved.");
+
+}
+
+
+function sendSMS() {
+
+  const message =
+    document.getElementById("smsMessage").value;
+
+  if (!message.trim()) {
+
+    alert("Please enter an SMS message.");
+
+    return;
+
+  }
+
+  alert(
+    "SMS module is ready. SMS provider connection will be added next."
+  );
+
+}
+
+</script>
+
+</body>
+</html>
