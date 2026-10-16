@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>BUMATECH | Technology Solutions</title>
+
+  <meta name="description" content="BUMATECH provides technology solutions, digital services, website development and ICT support.">
+
+  <meta name="theme-color" content="#0756b5">
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --blue: #0756b5;
+      --dark-blue: #063675;
+      --light-blue: #eaf3ff;
+      --white: #ffffff;
+      --text: #263449;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background: #f5f8fc;
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    header {
+      background: var(--white);
+      padding: 15px 6%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      box-shadow: 0 2px 10px #00000010;
+    }
+
+    .logo {
+      font-size: 26px;
+      font-weight: bold;
+      color: var(--blue);
+    }
+
+    .logo span {
+      color: #222;
+    }
+
+    nav {
+      display: flex;
+      gap: 18px;
+      flex-wrap: wrap;
+    }
+
+    nav a {
+      text-decoration: none;
+      color: #263449;
+      font-weight: bold;
+      font-size: 14px;
+    }
+
+    nav a:hover {
+      color: var(--blue);
+    }
+
+    .hero {
+      min-height: 480px;
+      padding: 80px 8%;
+      display: flex;
+      align-items: center;
+      background: linear-gradient(135deg, #063675, #0878ed);
+      color: white;
+    }
+
+    .hero-content {
+      max-width: 720px;
+    }
+
+    .hero h1 {
+      font-size: clamp(36px, 6vw, 58px);
+      line-height: 1.15;
+      margin-bottom: 20px;
+    }
+
+    .hero p {
+      font-size: 18px;
+      margin-bottom: 28px;
+    }
+
+    .button {
+      display: inline-block;
+      padding: 13px 23px;
+      border-radius: 7px;
+      text-decoration: none;
+      font-weight: bold;
+      margin: 5px 8px 5px 0;
+    }
+
+    .button-white {
+      background: white;
+      color: var(--blue);
+    }
+
+    .button-outline {
+      border: 2px solid white;
+      color: white;
+    }
+
+    section {
+      padding: 60px 7%;
+    }
+
+    .section-title {
+      text-align: center;
+      color: var(--dark-blue);
+      font-size: 32px;
+      margin-bottom: 12px;
+    }
+
+    .section-description {
+      text-align: center;
+      max-width: 650px;
+      margin: 0 auto 35px;
+    }
+
+    .services {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 22px;
+    }
+
+    .service-card {
+      background: white;
+      padding: 27px 22px;
+      border-radius: 12px;
+      box-shadow: 0 5px 20px #0000000a;
+      border-bottom: 4px solid var(--blue);
+    }
+
+    .service-icon {
+      font-size: 36px;
+      margin-bottom: 10px;
+    }
+
+    .service-card h3 {
+      color: var(--dark-blue);
+      margin-bottom: 10px;
+    }
+
+    .about {
+      background: var(--light-blue);
+      text-align: center;
+    }
+
+    .about p {
+      max-width: 800px;
+      margin: 15px auto;
+    }
+
+    .contact {
+      text-align: center;
+      background: white;
+    }
+
+    .contact-box {
+      max-width: 650px;
+      margin: auto;
+      padding: 30px;
+      background: var(--light-blue);
+      border-radius: 12px;
+    }
+
+    .contact-box p {
+      margin: 10px 0;
+    }
+
+    footer {
+      background: #06264f;
+      color: white;
+      text-align: center;
+      padding: 24px 12px;
+    }
+
+    footer a {
+      color: white;
+      text-decoration: none;
+    }
+
+    @media (max-width: 600px) {
+      header {
+        justify-content: center;
+        text-align: center;
+      }
+
+      nav {
+        justify-content: center;
+        gap: 12px;
+      }
+
+      .hero {
+        padding: 60px 6%;
+        min-height: 400px;
+      }
+
+      section {
+        padding: 45px 6%;
+      }
+
+      .section-title {
+        font-size: 27px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- HEADER -->
+  <header>
+    <div class="logo">BUMA<span>TECH</span></div>
+
+    <nav>
+      <a href="#home">Home</a>
+      <a href="#services">Services</a>
+      <a href="#about">About</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </header>
+
+  <!-- HERO SECTION -->
+  <main>
+    <section class="hero" id="home">
+      <div class="hero-content">
+        <h1>Smart Technology. Better Solutions.</h1>
+
+        <p>
+          Welcome to BUMATECH — your partner in digital innovation,
+          ICT services and technology solutions designed to help
+          individuals, schools and businesses grow.
+        </p>
+
+        <a href="#services" class="button button-white">
+          Explore Our Services
+        </a>
+
+        <a href="#contact" class="button button-outline">
+          Contact Us
+        </a>
+      </div>
+    </section>
+
+    <!-- SERVICES -->
+    <section id="services">
+      <h2 class="section-title">Our Services</h2>
+
+      <p class="section-description">
+        We help you use technology to work smarter, communicate better
+        and achieve your goals.
+      </p>
+
+      <div class="services">
+
+        <div class="service-card">
+          <div class="service-icon">💻</div>
+          <h3>Website Development</h3>
+          <p>
+            Modern, responsive websites for businesses, schools,
+            organizations and personal brands.
+          </p>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon">🖥️</div>
+          <h3>ICT Support</h3>
+          <p>
+            Technology setup, troubleshooting, computer support
+            and practical digital solutions.
+          </p>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon">📱</div>
+          <h3>Digital Solutions</h3>
+          <p>
+            Digital tools and online systems that simplify business
+            operations and improve productivity.
+          </p>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon">🏫</div>
+          <h3>School Management Systems</h3>
+          <p>
+            Digital school management solutions for student records,
+            teachers, examinations and academic reports.
+          </p>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon">🌐</div>
+          <h3>Online Services</h3>
+          <p>
+            Assistance with online platforms, digital applications
+            and business technology solutions.
+          </p>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon">📊</div>
+          <h3>Data & Reporting</h3>
+          <p>
+            Digital data management, spreadsheet solutions and
+            reports to support informed decisions.
+          </p>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ABOUT -->
+    <section class="about" id="about">
+      <h2 class="section-title">About BUMATECH</h2>
+
+      <p>
+        BUMATECH is a technology-focused brand committed to helping
+        people, schools and businesses benefit from digital innovation.
+      </p>
+
+      <p>
+        Our goal is to make technology practical, accessible and useful
+        through reliable services, creative ideas and customer-focused
+        solutions.
+      </p>
+    </section>
+
+    <!-- CONTACT -->
+    <section class="contact" id="contact">
+      <h2 class="section-title">Get in Touch</h2>
+
+      <p class="section-description">
+        Have a project, need ICT support or want a website for your
+        organization? Contact BUMATECH today.
+      </p>
+
+      <div class="contact-box">
+        <h3>Let's Work Together</h3>
+
+        <p>
+          Tell us what you need, and let's explore the right
+          technology solution for you.
+        </p>
+
+        <!-- Replace the example number with your WhatsApp number -->
+        <a
+          href="https://wa.me/254700000000"
+          class="button button-white"
+          style="background:#0756b5;color:white;"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Chat on WhatsApp
+        </a>
+
+        <p><strong>Phone:</strong> Add your phone number</p>
+        <p><strong>Email:</strong> Add your business email</p>
+        <p><strong>Location:</strong> Kenya</p>
+      </div>
+    </section>
+  </main>
+
+  <!-- FOOTER -->
+  <footer>
+    <p>
+      &copy; <span id="year"></span> BUMATECH.
+      All rights reserved.
+    </p>
+
+    <p>Technology for a Better Tomorrow.</p>
+  </footer>
+
+  <script>
+    document.getElementById("year").textContent =
+      new Date().getFullYear();
+  </script>
+
+</body>
+</html>
