@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>BUMATECH | Login</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #003366, #007bff);
+            padding: 20px;
+        }
+
+        .login-box {
+            background: #ffffff;
+            width: 100%;
+            max-width: 400px;
+            padding: 35px 28px;
+            border-radius: 18px;
+            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.25);
+        }
+
+        .logo {
+            width: 75px;
+            height: 75px;
+            border-radius: 50%;
+            background: #0056b3;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 25px;
+            font-weight: bold;
+            margin: 0 auto 15px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #0056b3;
+            font-size: 28px;
+            margin-bottom: 8px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 28px;
+            font-size: 14px;
+        }
+
+        label {
+            display: block;
+            font-weight: bold;
+            color: #333;
+            margin: 15px 0 8px;
+        }
+
+        input {
+            width: 100%;
+            padding: 13px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 15px;
+            outline: none;
+        }
+
+        input:focus {
+            border-color: #007bff;
+            box-shadow: 0 0 4px rgba(0, 123, 255, 0.3);
+        }
+
+        .password-wrap {
+            position: relative;
+        }
+
+        .password-wrap input {
+            padding-right: 65px;
+        }
+
+        .toggle-password {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            border: none;
+            background: transparent;
+            color: #0056b3;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .forgot {
+            display: block;
+            text-align: right;
+            margin: 12px 0 20px;
+            color: #0056b3;
+            font-size: 13px;
+            text-decoration: none;
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 8px;
+            background: #0056b3;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .login-btn:hover {
+            background: #003d80;
+        }
+
+        .login-btn:disabled {
+            opacity: 0.65;
+            cursor: wait;
+        }
+
+        #message {
+            margin-top: 15px;
+            text-align: center;
+            font-size: 14px;
+            overflow-wrap: anywhere;
+        }
+
+        .register {
+            text-align: center;
+            margin-top: 23px;
+            font-size: 14px;
+            color: #555;
+        }
+
+        .register a {
+            color: #0056b3;
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 25px;
+            font-size: 12px;
+            color: #777;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="login-box">
+
+    <div class="logo">BT</div>
+
+    <h1>BUMATECH</h1>
+
+    <p class="subtitle">Welcome back! Sign in to continue.</p>
+
+    <form id="loginForm">
+
+        <label for="email">Email Address</label>
+        <input
+            type="email"
+            id="email"
+            placeholder="Enter your email"
+            autocomplete="email"
+            required
+        >
+
+        <label for="password">Password</label>
+
+        <div class="password-wrap">
+            <input
+                type="password"
+                id="password"
+                placeholder="Enter your password"
+                autocomplete="current-password"
+                required
+            >
+
+            <button
+                type="button"
+                class="toggle-password"
+                id="togglePassword"
+            >Show</button>
+        </div>
+
+        <a href="#" class="forgot" id="forgotPassword">
+            Forgot password?
+        </a>
+
+        <button type="submit" class="login-btn" id="loginBtn">
+            LOGIN
+        </button>
+
+        <p id="message" role="status" aria-live="polite"></p>
+
+    </form>
+
+    <div class="register">
+        Don't have an account?
+        <a href="register.html">Register Here</a>
+    </div>
+
+    <footer>
+        &copy; 2026 BUMATECH. All rights reserved.
+    </footer>
+
+</div>
+
+<!-- Load Supabase library first -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+    /*
+      IMPORTANT:
+      Replace these placeholders with your Supabase project details.
+      Find them in Supabase Dashboard > Project Settings > API.
+    */
+
+    const SUPABASE_URL = "https://kgibditegnkghtvcmilc.supabase.co/";
+    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtnaWJkaXRlZ25rZ2h0dmNtaWxjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTA4NTkyMDUsImV4cCI6MjEwNjQzNTIwNX0.XE5j1guWFYnz6SwftIPFAh7lkFUVa8D5dXKkeuuNkPs";
+
+    let supabaseClient = null;
+
+    if (
+        window.supabase &&
+        SUPABASE_URL.startsWith("https://") &&
+        !SUPABASE_URL.includes("YOUR_SUPABASE") &&
+        !SUPABASE_ANON_KEY.includes("YOUR_SUPABASE")
+    ) {
+        supabaseClient = window.supabase.createClient(
+            SUPABASE_URL,
+            SUPABASE_ANON_KEY
+        );
+    }
+
+    const form = document.getElementById("loginForm");
+    const message = document.getElementById("message");
+    const loginBtn = document.getElementById("loginBtn");
+    const passwordInput = document.getElementById("password");
+
+    document.getElementById("togglePassword").addEventListener(
+        "click",
+        function () {
+            const hidden = passwordInput.type === "password";
+
+            passwordInput.type = hidden ? "text" : "password";
+            this.textContent = hidden ? "Hide" : "Show";
+        }
+    );
+
+    form.addEventListener("submit", async function (event) {
+        event.preventDefault();
+
+        if (!supabaseClient) {
+            message.style.color = "red";
+            message.textContent =
+                "Supabase is not configured. Add your project URL and key.";
+            return;
+        }
+
+        const email = document.getElementById("email").value.trim();
+        const password = passwordInput.value;
+
+        loginBtn.disabled = true;
+        loginBtn.textContent = "Signing in...";
+        message.textContent = "";
+
+        try {
+            const { data, error } =
+                await supabaseClient.auth.signInWithPassword({
+                    email: email,
+                    password: password
+                });
+
+            if (error) {
+                throw error;
+            }
+
+            if (!data.session) {
+                throw new Error("Login succeeded, but no session was created.");
+            }
+
+            message.style.color = "green";
+            message.textContent = "Login successful! Opening dashboard...";
+
+            // Change this filename if your dashboard has another name.
+            window.location.href = "dashboard.html";
+
+        } catch (error) {
+            message.style.color = "red";
+            message.textContent = error.message || "Login failed.";
+            loginBtn.disabled = false;
+            loginBtn.textContent = "LOGIN";
+        }
+    });
+
+    document.getElementById("forgotPassword").addEventListener(
+        "click",
+        async function (event) {
+            event.preventDefault();
+
+            if (!supabaseClient) {
+                message.style.color = "red";
+                message.textContent = "Configure Supabase first.";
+                return;
+            }
+
+            const email = document.getElementById("email").value.trim();
+
+            if (!email) {
+                message.style.color = "red";
+                message.textContent =
+                    "Enter your email address first.";
+                return;
+            }
+
+            message.style.color = "#0056b3";
+            message.textContent = "Sending password reset request...";
+
+            try {
+                const { error } =
+                    await supabaseClient.auth.resetPasswordForEmail(email, {
+                        redirectTo: window.location.origin +
+                            window.location.pathname.replace(
+                                /[^/]*$/,
+                                "reset-password.html"
+                            )
+                    });
+
+                if (error) throw error;
+
+                message.style.color = "green";
+                message.textContent =
+                    "If the account exists, a password reset email will be sent.";
+            } catch (error) {
+                message.style.color = "red";
+                message.textContent = error.message;
+            }
+        }
+    );
+</script>
+
+</body>
+</html>
